@@ -59,23 +59,55 @@ const TodoList = ()=> {
         ))
     }
 
-    return (
+    const onDragEnd = (result) => {
+        if (!result.destination) {
+          return;
+        }
+    
+        const updatedTodos = [...todos];
+        const [reorderedTodo] = updatedTodos.splice(result.source.index, 1);
+        updatedTodos.splice(result.destination.index, 0, reorderedTodo);
+    
+        setTodos(updatedTodos);
+      };
+    
+      return (
         <div className="max-w-md mx-auto mt-8">
-            <NewTodoForm addTodo={addTodo} />
-            {todos.map((todo) => (
-                <Todo
-                key={todo.taskId}
-                task={todo.task}
-                isCompleted={todo.isCompleted}
-                removeTodo={() => removeTodo(todo.taskId)}
-                editTodo={(updatedTask) => editTodo(todo.taskId, updatedTask)}
-                markAsCompleted={() => markAsCompleted(todo.taskId)}
-                markAsNotCompleted={() => markAsNotCompleted(todo.taskId)}
-                />
-            ))}
+          <NewTodoForm addTodo={addTodo} />
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="todos" direction="vertical">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {todos.map((todo, index) => (
+                    <Draggable key={todo.taskId} draggableId={todo.taskId} index={index}>
+                      {(provided) => (
+                        <div
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                        >
+                          <Todo
+                            task={todo.task}
+                            isCompleted={todo.isCompleted}
+                            removeTodo={() => removeTodo(todo.taskId)}
+                            editTodo={(updatedTask) => editTodo(todo.taskId, updatedTask)}
+                            markAsCompleted={() => markAsCompleted(todo.taskId)}
+                            markAsNotCompleted={() => markAsNotCompleted(todo.taskId)}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
-        
-    )
+      );
 }
 
 export default TodoList;

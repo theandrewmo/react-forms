@@ -29,6 +29,10 @@ exports[`matches snapshot 1`] = `
         Add
       </button>
     </form>
+    <div
+      data-rbd-droppable-context-id="1"
+      data-rbd-droppable-id="todos"
+    />
   </div>
 </DocumentFragment>
 `;
