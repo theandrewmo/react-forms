@@ -1,7 +1,7 @@
 import NewTodoForm from "./NewTodoForm";
 import { useState } from 'react';
 import Todo from './Todo';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 
 /** TodoList - renders the NewTodoForm and the list of Todo Components
